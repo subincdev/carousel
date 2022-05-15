@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>내 남자친구 찾기</title>
+    <style>
+      html {
+        height: 100%;
+        font-size: 3rem;
+      }
+      .title-txt {
+        margin-bottom: 20px;
+      }
+      .stage {
+        background: linear-gradient(
+          to bottom right,
+          rgb(249, 189, 217),
+          rgb(255, 255, 255)
+        );
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100vw;
+        height: 100vh;
+        perspective: 1000px;
+      }
+      .carousel {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        transform-style: preserve-3d;
+        transition: all 1s;
+      }
+      .panel {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 200px;
+        height: 200px;
+        background: rgba(255, 255, 255, 0.5);
+      }
+
+      .panel[transform="rotateY(60)"] {
+        border: 5px solid red;
+      }
+
+      .btn-wrap {
+        /* transform: translateZ(800px); */
+        position: fixed;
+        display: flex;
+        justify-content: space-between;
+        width: 400px;
+        transform-style: preserve-3d;
+        margin: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="stage">
+      <div class="title-txt">내 남자친구 용명이 찾기</div>
+      <div class="carousel"></div>
+      <div class="btn-wrap">
+        <button class="btn left"><</button>
+        <button class="btn right">></button>
+      </div>
+    </div>
+    <script>
+      //carousel에 자식 panel img로 추가하기
+      //panel에 innderHTML로 이미지태그로 넣기 ${i} for문으로 넣어보기
+      const carousel = document.querySelector(".carousel");
+      const panel = document.querySelectorAll(".panel");
+      const leftBtn = document.querySelector(".left");
+      const rightBtn = document.querySelector(".right");
+      const panelNum = 6;
+      const deg = parseInt(360 / panelNum);
+      let carouselDeg = 0;
+      const distance = Math.ceil(
+        100 / Math.abs(Math.tan(((deg / 2) * Math.PI) / 180)) + 10
+      );
+      for (let i = 0; i < panelNum; i++) {
+        carousel.innerHTML += `<img src="./img/img-${i}.jpeg" alt="" class="panel">`;
+        document.querySelector(
+          `.panel:nth-child(${i + 1})`
+        ).style.transform = `rotateY(${deg * i}deg) translateZ(${distance}px)`;
+      }
+
+      //왼쪽 버튼을 클릭하면, 모두다 -30도씩 변하고
+      //   function a(carousel) {
+      //     let deg = 0;
+      //     return function () {
+      //       //   if (deg < 300) {
+      //       deg += 60;
+      //       carousel.style.transform = `rotateY(${deg}deg)`;
+      //       return deg;
+      //       //   }
+      //       //   } else {
+      //       //     deg = 0;
+      //       //     carousel.style.transform = `rotateY(${deg}deg)`;
+      //       //     return deg;
+      //       //   }
+      //     };
+      //   }
+      //   leftBtn.addEventListener("click", a(carousel));
+      leftBtn.addEventListener("click", () => {
+        carousel.style.transform = `rotateY(${(carouselDeg += 60) % 720}deg)`;
+        console.log(carouselDeg);
+        if (carouselDeg == Math.floor(Math.random() * 10) * 60) {
+          alert("당신의 남자친구 입니다");
+        }
+      });
+      //오른쪽 버튼을 클릭하면 모두다 +30도씩 변하고
+      //   rightBtn.addEventListener("click", () => {});
+      rightBtn.addEventListener("click", () => {
+        carousel.style.transform = `rotateY(${(carouselDeg -= 60) % 720}deg)`;
+        console.log(carouselDeg);
+        if (carouselDeg == Math.floor(Math.random() * 10) * -60) {
+          alert("당신의 남자친구 입니다");
+        }
+      });
+    </script>
+  </body>
+</html>
